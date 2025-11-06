@@ -33,7 +33,7 @@ for i = 1:panels
 
     x = x_Vals(i);
     
-    if x <= (p*c)
+    if x < (p*c)
         y_c(i) = m * (x/(p)^2) * ((2*p) - (x/c));
         dy_c(i) = (m/(c*p)^3) * (-(2 * x * p) + (2 * c * p^2));
 
