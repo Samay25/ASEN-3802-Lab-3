@@ -1,6 +1,6 @@
-clc
+clc;
 close all
-clear all
+clear;
 
 
 m = input('Enter max camber value: ');
