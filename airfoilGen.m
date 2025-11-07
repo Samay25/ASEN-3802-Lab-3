@@ -51,10 +51,11 @@ xcoords = airfoil_x_coords;
 ycoords = airfoil_y_coords;
 
 figure();
-title('NACA Airfoil blah blah ill fix later')
-plot(airfoil_x_coords,airfoil_y_coords,LineWidth=.5,LineStyle="-x-");
-xlabel('ditance along chord [m]');
-ylabel('height from chord line [m]');
+plot(airfoil_x_coords,airfoil_y_coords,LineWidth=.5,DisplayName='Airfoil');
+xlabel('Ditance along chord [m]');
+ylabel('Height from chord line [m]');
+title('NACA Airfoil blah ill fix later');
+legend('Location','best');
 ylim([-8,8]);
 end
 
