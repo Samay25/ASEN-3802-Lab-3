@@ -11,6 +11,7 @@ Naca = input('1st Digit, 2nd Digit,3rd and 4th: ','s');
 panels = input('Numbers of panels: ');
 C = strsplit(Naca,',');
 airfoil = strcat(C{1},C{2},C{3});
+% airfoil2 = str2num(airfoil);
 Parts = str2double(C);
 
 % defining variables to pass into function
@@ -19,7 +20,7 @@ p = ((Parts(2)/10));
 t = ((Parts(3)/100)*c);
 
 % function call to generate airfoil plot 
-[XB,YB] = airfoilGen(m,p,t,c,panels);
+[XB,YB] = airfoilGen(m,p,t,c,panels,airfoil);
 
 
 % % user input for alpha 

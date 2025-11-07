@@ -64,7 +64,7 @@ else
 
 
 
-        y_t = zeros(panels,1);
+            y_t = zeros(panels,1);
         y_c = zeros(panels,1);
         dy_c = zeros(panels,1);
         xi = zeros(panels,1);
@@ -111,21 +111,17 @@ else
         
         xcoords = airfoil_x_coords;
         ycoords = airfoil_y_coords;
-
-        camberline = y_c;
         
         figtitle = strcat('NACA ' , airfoil);
         
         figure();
         plot(airfoil_x_coords,airfoil_y_coords,LineWidth=.5,DisplayName='Airfoil');
-        hold on; 
-        plot(x_Vals,camberline,LineWidth=.5,DisplayName='Camberline');
         xlabel('Ditance along chord [m]');
         ylabel('Height from chord line [m]');
         title(figtitle);
         legend('Location','best');
         ylim([-8,8]);
-    end
+        end
 
 end
 
