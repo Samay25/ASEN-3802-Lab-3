@@ -1,4 +1,4 @@
-function [xcoords,ycoords] = airfoilGen(m,p,t,c,panels,airfoil)
+function [xcoords,ycoords] = airfoilGen(m,p,t,c,panels,airfoil,plots)
 %AIRFOILGEN creates a figure plotting x,y coordinates of the airfoil by taking in
 %naca four digit info. chord length and number of panels
 
@@ -52,14 +52,15 @@ if m == 0
     ycoords = airfoil_y_coords;
     
     figtitle = strcat('NACA ' , airfoil);
-    
-    figure();
-    plot(airfoil_x_coords,airfoil_y_coords,LineWidth=.5,DisplayName='Airfoil');
-    xlabel('Ditance along chord [m]');
-    ylabel('Height from chord line [m]');
-    title(figtitle);
-    legend('Location','best');
-    ylim([-8,8]);
+    if plots == 1
+        figure();
+        plot(airfoil_x_coords,airfoil_y_coords,LineWidth=.5,DisplayName='Airfoil');
+        xlabel('Ditance along chord [m]');
+        ylabel('Height from chord line [m]');
+        title(figtitle);
+        legend('Location','best');
+        ylim([-8,8]);
+    end
 else
 
 
@@ -115,16 +116,17 @@ else
         camberline = y_c;
         
         figtitle = strcat('NACA ' , airfoil);
-        
-        figure();
-        plot(airfoil_x_coords,airfoil_y_coords,LineWidth=.5,DisplayName='Airfoil');
-        hold on; 
-        plot(x_Vals,camberline,LineWidth=.5,DisplayName='Camberline');
-        xlabel('Ditance along chord [m]');
-        ylabel('Height from chord line [m]');
-        title(figtitle);
-        legend('Location','best');
-        ylim([-8,8]);
+        if plots == 1
+            figure();
+            plot(airfoil_x_coords,airfoil_y_coords,LineWidth=.5,DisplayName='Airfoil');
+            hold on; 
+            plot(x_Vals,camberline,LineWidth=.5,DisplayName='Camberline');
+            xlabel('Ditance along chord [m]');
+            ylabel('Height from chord line [m]');
+            title(figtitle);
+            legend('Location','best');
+            ylim([-8,8]);
+        end
     end
 
 end
