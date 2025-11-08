@@ -47,14 +47,16 @@ cl = zeros(length(numPanels),1);
 % looping through panels and getting corresponding cl 
 for i = 1: length(numPanels)
 
+    % function call to airfoilGen with NACA0012 info
 [XB2,YB2] = airfoilGen(m2,p2,t2,c2,numPanels(i),'0012',0);
 
 % function call to vortex panel to 
 [cl(i)] = Vortex_Panel(XB2,YB2,alpha);
 end
 
+% max CL from cl vs. num panels
 CL_Max = max(cl);
-
+Clstr = strcat('Cl = ',num2str(CL_Max));
 
 
 % plotting cl vs. number of panels 
@@ -62,8 +64,8 @@ figure();
 plot(numPanels,cl);
 xlabel('Number of Panels');
 ylabel('Predicted Coeff. Lift');
-yline(CL_Max,'-','Cl Convergence',LineWidth=1.5);
-% ylim([.7,1]);
+yline(CL_Max,'--',{'Cl Conv.',Clstr},LineWidth=1.5,LabelHorizontalAlignment='left');
+ylim([.785,.9]);
 title('Predicted Cl vs. Number of Panels');
 
 
