@@ -33,41 +33,95 @@ clc;
 %% PART 1 TASK 2
 % -----------------------------------------
 
+% -------------------Deliverable 1----------------------
 % Params for NACA0012 at 5 degrees angle of attack
-c2 = 5; 
+% c2 = 5; 
+% m2 = 0;
+% p2 = 0; 
+% t2 =.12 * c2; 
+% alpha = 5; 
+% 
+% % length of numPanels to test
+% numPanels = 10:1:300;
+% cl = zeros(length(numPanels),1);
+% 
+% % looping through panels and getting corresponding cl 
+% for i = 1: length(numPanels)
+% 
+%     % function call to airfoilGen with NACA0012 info
+% [XB2,YB2] = airfoilGen(m2,p2,t2,c2,numPanels(i),'0012',0);
+% 
+% % function call to vortex panel to 
+% [cl(i)] = Vortex_Panel(XB2,YB2,alpha);
+% end
+% 
+% % max CL from cl vs. num panels
+% CL_Max = max(cl);
+% Clstr = strcat('Cl = ',num2str(CL_Max));
+% 
+% % Loop to get error and determin number of panels to achieve cl within 1
+% % percent
+% for i = 1: length(cl)
+% err(i) = (abs(CL_Max - cl(i)) / CL_Max)*100;
+% end
+% 
+% [~,numPanelsForExact] = find(err<1,1);
+% 
+% 
+% % plotting cl vs. number of panels 
+% figure();
+% plot(numPanels,cl);
+% xlabel('Number of Panels');
+% ylabel('Predicted Coeff. Lift');
+% yline(CL_Max,'--',{'Cl Conv.',Clstr},LineWidth=1.5,LabelHorizontalAlignment='left');
+% ylim([.785,.9]);
+% title('Predicted Cl vs. Number of Panels');
+
+% -----------------------------------------
+
+% ----------------Deliverable 2-------------------------
+% Values for NACA 0006, 0012, 0018
+c3 = 5; 
 m2 = 0;
 p2 = 0; 
-t2 =.12 * c2; 
+tVals = c3*[.06,.12,.18]; 
 alpha = 5; 
+alphaVals = linspace(-alpha,alpha);
 
-% length of numPanels to test
-numPanels = 10:1:300;
-cl = zeros(length(numPanels),1);
-
-% looping through panels and getting corresponding cl 
-for i = 1: length(numPanels)
-
-    % function call to airfoilGen with NACA0012 info
-[XB2,YB2] = airfoilGen(m2,p2,t2,c2,numPanels(i),'0012',0);
-
-% function call to vortex panel to 
-[cl(i)] = Vortex_Panel(XB2,YB2,alpha);
-end
-
-% max CL from cl vs. num panels
-CL_Max = max(cl);
-Clstr = strcat('Cl = ',num2str(CL_Max));
+% Airfoil codes 
+NACA = {'0006', '0012', '0018'};
+%struct for each 
+airfoils = [];
 
 
-% plotting cl vs. number of panels 
-figure();
-plot(numPanels,cl);
-xlabel('Number of Panels');
-ylabel('Predicted Coeff. Lift');
-yline(CL_Max,'--',{'Cl Conv.',Clstr},LineWidth=1.5,LabelHorizontalAlignment='left');
-ylim([.785,.9]);
-title('Predicted Cl vs. Number of Panels');
 
+    % function call to airfoilGen with each NACA airfoil
+    for i = 1: numel(NACA)
+        airfoils(i).code = NACA{i};
+        [airfoils(i).XB3(:,i),airfoils(i).YB3(:,i)] = airfoilGen(m2,p2,tVals(i),c3,100,NACA{i},0);
+    end
+
+    % function call to vortex panel to 
+    for i =1 : numel(NACA)
+        for j = 1 : length(alphaVals)
+            [airfoils(i).cl(j)] = Vortex_Panel(airfoils(i).XB3(:,i),airfoils(i).XB3(:,i),alphaVals(j));
+        end
+    end
+
+    figure();
+    plot(alphaVals,airfoils(1).cl,'DisplayName',strcat('NACA',NACA{1}));
+    hold on; 
+    plot(alphaVals,airfoils(2).cl,'DisplayName',strcat('NACA',NACA{2}));
+    hold on; 
+    plot(alphaVals,airfoils(3).cl,'DisplayName',strcat('NACA',NACA{3}));
+    xlabel('AoA');
+    ylabel('Cl')
+    title('Cl vs. AoA');
+    legend('Location','best');
+
+
+
+% -----------------------------------------
 
 
 

@@ -1,6 +1,7 @@
 function [xcoords,ycoords] = airfoilGen(m,p,t,c,panels,airfoil,plots)
 %AIRFOILGEN creates a figure plotting x,y coordinates of the airfoil by taking in
 %naca four digit info. chord length and number of panels
+%Put paramter plots equal to one if you want plot to show, if not 0 
 
 if m == 0 
     y_t = zeros(panels,1);
