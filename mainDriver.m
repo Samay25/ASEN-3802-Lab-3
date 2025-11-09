@@ -13,28 +13,28 @@ clc;
 % -----------------------------------------
 
 
-% user input and parsing
-c = input('enter chord length: ');
-Naca = input('1st Digit, 2nd Digit,3rd and 4th: ','s');
-panels = input('Numbers of panels: ');
-C = strsplit(Naca,',');
-airfoil = strcat(C{1},C{2},C{3});
-Parts = str2double(C);
-
-% defining variables to pass into function
-m = ((Parts(1)/100)*c); 
-p = ((Parts(2)/10));
-t = ((Parts(3)/100)*c);
-
-% function call to generate airfoil plot 
-[XB,YB] = airfoilGen(m,p,t,c,panels,airfoil,1);
+% % user input and parsing
+% c = input('enter chord length: ');
+% Naca = input('1st Digit, 2nd Digit,3rd and 4th: ','s');
+% panels = input('Numbers of panels: ');
+% C = strsplit(Naca,',');
+% airfoil = strcat(C{1},C{2},C{3});
+% Parts = str2double(C);
+% 
+% % defining variables to pass into function
+% m = ((Parts(1)/100)*c); 
+% p = ((Parts(2)/10));
+% t = ((Parts(3)/100)*c);
+% 
+% % function call to generate airfoil plot 
+% [XB,YB] = airfoilGen(m,p,t,c,panels,airfoil,1);
 
 % -----------------------------------------
 %% PART 1 TASK 2
 % -----------------------------------------
 
 % -------------------Deliverable 1----------------------
-% Params for NACA0012 at 5 degrees angle of attack
+% % Params for NACA0012 at 5 degrees angle of attack
 % c2 = 5; 
 % m2 = 0;
 % p2 = 0; 
@@ -42,7 +42,7 @@ t = ((Parts(3)/100)*c);
 % alpha = 5; 
 % 
 % % length of numPanels to test
-% numPanels = 10:1:300;
+% numPanels = 10:1:200;
 % cl = zeros(length(numPanels),1);
 % 
 % % looping through panels and getting corresponding cl 
@@ -74,7 +74,7 @@ t = ((Parts(3)/100)*c);
 % xlabel('Number of Panels');
 % ylabel('Predicted Coeff. Lift');
 % yline(CL_Max,'--',{'Cl Conv.',Clstr},LineWidth=1.5,LabelHorizontalAlignment='left');
-% ylim([.785,.9]);
+% ylim([.785,.87]);
 % title('Predicted Cl vs. Number of Panels');
 
 % -----------------------------------------
