@@ -13,21 +13,21 @@ clc;
 % -----------------------------------------
 
 
-% % user input and parsing
-% c = input('enter chord length: ');
-% Naca = input('1st Digit, 2nd Digit,3rd and 4th: ','s');
-% panels = input('Numbers of panels: ');
-% C = strsplit(Naca,',');
-% airfoil = strcat(C{1},C{2},C{3});
-% Parts = str2double(C);
-% 
-% % defining variables to pass into function
-% m = ((Parts(1)/100)*c); 
-% p = ((Parts(2)/10));
-% t = ((Parts(3)/100)*c);
-% 
-% % function call to generate airfoil plot 
-% [XB,YB] = airfoilGen(m,p,t,c,panels,airfoil,1);
+% user input and parsing
+c = input('enter chord length: ');
+Naca = input('1st Digit, 2nd Digit,3rd and 4th: ','s');
+panels = input('Numbers of panels: ');
+C = strsplit(Naca,',');
+airfoil = strcat(C{1},C{2},C{3});
+Parts = str2double(C);
+
+% defining variables to pass into function
+m = ((Parts(1)/100)*c); 
+p = ((Parts(2)/10));
+t = ((Parts(3)/100)*c);
+
+% function call to generate airfoil plot 
+[XB,YB] = airfoilGen(m,p,t,c,panels,airfoil,1);
 
 % -----------------------------------------
 %% PART 1 TASK 2
@@ -81,43 +81,43 @@ clc;
 
 % ----------------Deliverable 2-------------------------
 % Values for NACA 0006, 0012, 0018
-c3 = 5; 
-m2 = 0;
-p2 = 0; 
-tVals = c3*[.06,.12,.18]; 
-alpha = 5; 
-alphaVals = linspace(-alpha,alpha);
-
-% Airfoil codes 
-NACA = {'0006', '0012', '0018'};
-%struct for each 
-airfoils = [];
-
-
-
-    % function call to airfoilGen with each NACA airfoil
-    for i = 1: numel(NACA)
-        airfoils(i).code = NACA{i};
-        [airfoils(i).XB3(:,i),airfoils(i).YB3(:,i)] = airfoilGen(m2,p2,tVals(i),c3,100,NACA{i},0);
-    end
-
-    % function call to vortex panel to 
-    for i =1 : numel(NACA)
-        for j = 1 : length(alphaVals)
-            [airfoils(i).cl(j)] = Vortex_Panel(airfoils(i).XB3(:,i),airfoils(i).XB3(:,i),alphaVals(j));
-        end
-    end
-
-    figure();
-    plot(alphaVals,airfoils(1).cl,'DisplayName',strcat('NACA',NACA{1}));
-    hold on; 
-    plot(alphaVals,airfoils(2).cl,'DisplayName',strcat('NACA',NACA{2}));
-    hold on; 
-    plot(alphaVals,airfoils(3).cl,'DisplayName',strcat('NACA',NACA{3}));
-    xlabel('AoA');
-    ylabel('Cl')
-    title('Cl vs. AoA');
-    legend('Location','best');
+% c3 = 5; 
+% m2 = 0;
+% p2 = 0; 
+% tVals = c3*[.06,.12,.18]; 
+% alpha = 5; 
+% alphaVals = linspace(-alpha,alpha);
+% 
+% % Airfoil codes 
+% NACA = {'0006', '0012', '0018'};
+% %struct for each 
+% airfoils = [];
+% 
+% 
+% 
+%     % function call to airfoilGen with each NACA airfoil
+%     for i = 1: numel(NACA)
+%         airfoils(i).code = NACA{i};
+%         [airfoils(i).XB3(:,i),airfoils(i).YB3(:,i)] = airfoilGen(m2,p2,tVals(i),c3,100,NACA{i},0);
+%     end
+% 
+%     % function call to vortex panel to 
+%     for i =1 : numel(NACA)
+%         for j = 1 : length(alphaVals)
+%             [airfoils(i).cl(j)] = Vortex_Panel(airfoils(i).XB3(:,i),airfoils(i).XB3(:,i),alphaVals(j));
+%         end
+%     end
+% 
+%     figure();
+%     plot(alphaVals,airfoils(1).cl,'DisplayName',strcat('NACA',NACA{1}));
+%     hold on; 
+%     plot(alphaVals,airfoils(2).cl,'DisplayName',strcat('NACA',NACA{2}));
+%     hold on; 
+%     plot(alphaVals,airfoils(3).cl,'DisplayName',strcat('NACA',NACA{3}));
+%     xlabel('AoA');
+%     ylabel('Cl')
+%     title('Cl vs. AoA');
+%     legend('Location','best');
 
 
 
