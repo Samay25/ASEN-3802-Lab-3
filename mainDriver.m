@@ -122,8 +122,9 @@ airfoils = [];
     plot(alphaVals,airfoils(2).cl,'DisplayName',strcat('NACA',NACA{2}));
     hold on; 
     plot(alphaVals,airfoils(3).cl,'DisplayName',strcat('NACA',NACA{3}));
-    xlabel('AoA [Degrees]');
-    ylabel('Cl')
+    xlabel('Sectional Angle of Attack [Degrees]');
+    ylabel('Sectional Lift Coefficient')
+    title('Cl vs. AoA');
     title('Coefficient of Lift vs. Angle of Attack');
     legend('Location','best');
 
