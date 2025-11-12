@@ -12,7 +12,7 @@ clc;
 PartOneTask1 = 0;
 PartOneDel1 = 0;
 PartOneDel2 = 0;
-PartOneTask3 =1;
+PartOneTask3 =0;
 
 % -----------------------------------------
 %% PART 1 TASK 1 
@@ -93,7 +93,7 @@ m2 = 0;
 p2 = 0; 
 tVals =[.06,.12,.18]; 
 alpha = 5; 
-alphaVals = linspace(-20,20);
+alphaVals = -20:5:20;
 
 % Airfoil codes 
 NACA = {'0006', '0012', '0018'};
@@ -107,31 +107,33 @@ airfoils = [];
         airfoils(i).code = NACA{i};
         [airfoils(i).XB3(:,1),airfoils(i).YB3(:,1)] = airfoilGen(m2,p2,tVals(i),c3,100,NACA{i},0);
     end
-    % vortex panel for cl vs. alpha -----------------
+    % ----------testing vortex panel for cl vs. alpha -----------------
     for i =1: numel(NACA)
-        
         for j = 1 : length(alphaVals)
             [airfoils(i).cl(j)] = Vortex_Panel(airfoils(i).XB3(:,1),airfoils(i).YB3(:,1),alphaVals(j));
         end
     end
 
+    %--------------------------------------------------------------------
 
     % Plotting each cl vs. alpha
     figure();
-     for i = 1: numel(NACA)
-       plot(alphaVals,airfoils(i).cl,'DisplayName',strcat('NACA',NACA{i}));
-        hold on; 
-    end
-    xlabel('Sectional Angle of Attack [Degrees]');
-    ylabel('Sectional Lift Coefficient')
-    yline(0, '-', 'Zero-Lift Line', 'LineWidth', 1.5, ...
-    'LabelHorizontalAlignment','left','LabelVerticalAlignment','bottom');
-    title('Coefficient of Lift vs. Angle of Attack');
+    plot(alphaVals,airfoils(1).cl,'DisplayName',strcat('NACA',NACA{1}));
+    hold on; 
+    plot(alphaVals,airfoils(2).cl,'DisplayName',strcat('NACA',NACA{2}));
+    hold on; 
+    plot(alphaVals,airfoils(3).cl,'DisplayName',strcat('NACA',NACA{3}));
+    yline(0,'-.',{'Zero Lift Line'},'HandleVisibility', 'off');
+    xline(0,'-.',{'alpha(L=0) = 0'},'LabelHorizontalAlignment','Left','HandleVisibility', 'off');
+    xlabel('AoA');
+    ylabel('Cl')
+    title('Cl vs. AoA');
     legend('Location','best');
 
 
 
 %-----------------------------------------
+
 end
 
 
