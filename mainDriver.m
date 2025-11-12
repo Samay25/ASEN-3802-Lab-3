@@ -11,7 +11,7 @@ clc;
 %% Plot suppressions 
 PartOneTask1 = 0;
 PartOneDel1 = 0;
-PartOneDel2 = 1;
+PartOneDel2 = 0;
 PartOneTask3 =1;
 
 % -----------------------------------------
@@ -144,14 +144,14 @@ if PartOneTask3 ==1
 
 %Values for NACA 0012, 2412, 4412
 c3 = 10; 
-mVals = [0,0,0,.02,.04];
-pVals = [0,0,0,.4,.4]; 
-tVals =[.06,.12,.18,.12,.12]; 
+mVals = [0,.02,.04];
+pVals = [0,.4,.4]; 
+tVals =[.12,.12,.12]; 
 alpha = 5; 
-alphaVals = -20:1:20;
+alphaVals = -30:1:30;
 
 % Airfoil codes 
-NACA = {'0006', '0012', '0018','2412','4412'}; % need to be same order as t vals 
+NACA = {'0012','2412','4412'}; % need to be same order as t vals 
 
 %struct for each 
 airfoils = [];
@@ -167,6 +167,7 @@ airfoils = [];
     for i =1: numel(NACA)
         for j = 1 : length(alphaVals)
             [airfoils(i).cl(j)] = Vortex_Panel(airfoils(i).XB3(:,1),airfoils(i).YB3(:,1),alphaVals(j));
+            airfoils(i).a0 = mean(diff(airfoils(i).cl));
         end
     end
 
@@ -179,9 +180,10 @@ airfoils = [];
         hold on; 
     end
     xlabel('Sectional Angle of Attack [Degrees]');
-    ylabel('Sectional Lift Coefficient');
-    yline(0,'--',{'Zero Lift Line.'},LineWidth=1.5,LabelHorizontalAlignment='left');
-    xline(-4.54, '--r', '\alpha_{L=0} = -4.54°', 'LineWidth', 1.2, 'LabelHorizontalAlignment','left','Interpreter','latex');
+    ylabel('Sectional Lift Coefficient')
+    yline(0,'-.',{'Zero Lift Line'},'HandleVisibility', 'off');
+    xline(-2,'-.',{'alpha(L=0) is -2','for NACA 2412'},'LabelHorizontalAlignment','Right','HandleVisibility', 'off');
+    xline(-4,'-.',{'alpha(L=0) is -4','for NACA 4412'},'LabelHorizontalAlignment','Left','HandleVisibility', 'off');
     title('Cl vs. AoA');
     legend('Location','best');
 
