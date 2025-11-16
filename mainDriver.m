@@ -14,6 +14,10 @@ PartOneDel1 = 0;
 PartOneDel2 = 0;
 PartOneTask3 =0;
 
+PartTwoTask2 = 0; 
+
+
+
 % -----------------------------------------
 %% PART 1 TASK 1 
 % -----------------------------------------
@@ -194,7 +198,117 @@ airfoils = [];
 %-----------------------------------------
 end 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+if PartTwoTask2 ==1
+% -----------------------------------------
+% PART 2 TASK 2
+% -----------------------------------------
+
+% % units of meters and radians
+
+%% First Debugging Scenario
+b1 = 100; a0_t1 = 2*pi; a0_r1 = 2*pi; c_t1 = 10; c_r1 = 10; aero_t1 = 0; aero_r1 = 0; geo_t1 = 5*pi/180; geo_r1 = 5*pi/180; N1 = 5;
+[e1, c_L1, c_Di1] = PLLT2(b1,a0_t1,a0_r1,c_t1,c_r1,aero_t1,aero_r1,geo_t1,geo_r1,N1);
+
+% should output the following below ----------
+
+%{
+    e = 0.9227
+    
+    
+    c_L = 0.4402
+    
+    
+    c_Di = 0.0067
+
+%}
+
+% ----------------------------------------
+
+%% Second Debugging Scenario
+ b2 = 100; a0_t2 = 2*pi; a0_r2 = 2*pi; c_t2 = 8; c_r2 = 10; aero_t2 = 0; aero_r2 = 0; geo_t2 = 5*pi/180; geo_r2 = 5*pi/180; N2 = 5;
+[e2, c_L2, c_Di2] = PLLT2(b2,a0_t2,a0_r2,c_t2,c_r2,aero_t2,aero_r2,geo_t2,geo_r2,N2);
+
+% should output the following ----------
+
+%{
+e = 0.9430
+
+
+c_L = 0.4534
+
+
+c_Di = 0.0062
+%}
+
+% ----------------------------------------
+
+%% Third Debugging Scenario
+b3 = 100; a0_t3 = 6.3; a0_r3 = 6.5; c_t3 = 8; c_r3 = 10; aero_t3 = 0; aero_r3 = -2*pi/180; geo_t3 = 5*pi/180; geo_r3 = 7*pi/180; N3 = 5;
+[e3, c_L3, c_Di3] = PLLT2(b3,a0_t3,a0_r3,c_t3,c_r3,aero_t3,aero_r3,geo_t3,geo_r3,N3);
+
+% should output the following ----------
+
+%{
+e = 0.9795
+
+
+c_L = 0.6674
+
+
+c_Di = 0.0130
+
+%}
+
+% ----------------------------------------
+
+%% Plotting Induced Drag vs. Taper Ratio
+
+% Aspect ratio space
+AR = 4:2:10;
+% Taper ratio space
+TaperRatio = linspace(0,1);
+% Induced drag and induced drag factor space
+InducedDragFactor =zeros(length(AR),length(TaperRatio));
+
+% wing characteristics besides chord
+bP = 100; a0_tP = 2*pi; a0_rP = 2*pi; aero_tP = 0; aero_rP = 0; geo_tP = 5*pi/180; geo_rP = 5*pi/180; NP = 50;
+
+
+% loop through to get induced drag values with constant aspect ratios 
+for i = 1: length(AR)
+
+    tempAR = AR(i);
+
+    for j =1 : length(TaperRatio) 
+
+        tempTapeRat = TaperRatio(j);
+
+        % compute tip and root chord lengths 
+         c_r2P = 2*bP / (tempAR*(1+tempTapeRat));
+         c_t2P = tempTapeRat * c_r2P;
+
+        % compute induced drag factor for fixed AR wing with N = 50 terms
+        [eP,~,~] = PLLT2(bP,a0_tP,a0_rP,c_t2P,c_r2P,aero_tP,aero_rP,geo_tP,geo_rP,NP);
+        InducedDragFactor(i,j) = (1/eP)-1;
+    end
+end
+
+
+
+figure();
+for i = 1 : length(AR)
+    plot(TaperRatio,InducedDragFactor(i,:),'DisplayName',sprintf('AR = %d',AR(i)),LineWidth=2);
+    hold on;
+end 
+xlabel('$\frac{c_t}{c_r}$','Interpreter','latex');
+ylabel('$\delta $','Interpreter','latex');
+ylim([0,.16]);
+title('Induced Drag Factor vs. Taper Ratio');
+legend('Position',[0.374791666666667 0.391435880447585 0.0590277777777777 0.0747938751472319]);
+
+end
 
 
 
