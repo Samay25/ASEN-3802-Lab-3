@@ -14,7 +14,7 @@ PartOneDel1 = 0;
 PartOneDel2 = 0;
 PartOneTask3 =0;
 
-PartTwoTask2 = 0; 
+PartTwoTask2 = 1; 
 
 
 
