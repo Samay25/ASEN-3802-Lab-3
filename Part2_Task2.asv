@@ -1,7 +1,7 @@
 clear; close all; clc; 
 
 %% Pretty plots set up
-% set(0, 'defaultFigureUnits', 'inches', 'defaultFigurePosition', [1 1 8 5]);
+%set(0, 'defaultFigureUnits', 'inches', 'defaultFigurePosition', [1 1 8 5]);
 % figures are 8" wide and 5" tall, with the bottom left corner of the
 %figure beginning 1" up, and 1" to the right from the bottom left corner
 %of your screen -- adjust the size of the figure to your liking
@@ -20,7 +20,8 @@ set(0,'defaultAxesYGrid','on')
 %---------------------
 
 % % units of meters and radians
-
+% 
+% 
 %% First Debugging Scenario
 b1 = 100; a0_t1 = 2*pi; a0_r1 = 2*pi; c_t1 = 10; c_r1 = 10; aero_t1 = 0; aero_r1 = 0; geo_t1 = 5*pi/180; geo_r1 = 5*pi/180; N1 = 5;
 [e1, c_L1, c_Di1] = PLLT2(b1,a0_t1,a0_r1,c_t1,c_r1,aero_t1,aero_r1,geo_t1,geo_r1,N1);
@@ -84,10 +85,11 @@ AR = 4:2:10;
 % Taper ratio space
 TaperRatio = linspace(0,1);
 % Induced drag and induced drag factor space
+c_Di = zeros(length(AR),length(TaperRatio));
 InducedDragFactor =zeros(length(AR),length(TaperRatio));
 
 % wing characteristics besides chord
-bP = 100; a0_tP = 2*pi; a0_rP = 2*pi; aero_tP = 0; aero_rP = 0; geo_tP = 5*pi/180; geo_rP = 5*pi/180; NP = 50;
+b = 100; a0_t = 2*pi; a0_r = 2*pi; aero_t = 0; aero_r = 0; geo_t = 5*pi/180; geo_r = 5*pi/180; N = 5;
 
 
 % loop through to get induced drag values with constant aspect ratios 
@@ -100,12 +102,12 @@ for i = 1: length(AR)
         tempTapeRat = TaperRatio(j);
 
         % compute tip and root chord lengths 
-         c_r2P = 2*bP / (tempAR*(1+tempTapeRat));
-         c_t2P = tempTapeRat * c_r2P;
+         c_r2 = 2*b / (tempAR*(1+tempTapeRat));
+         c_t2 = tempTapeRat * c_r2;
 
         % compute induced drag factor for fixed AR wing with N = 50 terms
-        [eP,~,~] = PLLT2(bP,a0_tP,a0_rP,c_t2P,c_r2P,aero_tP,aero_rP,geo_tP,geo_rP,NP);
-        InducedDragFactor(i,j) = (1/eP)-1;
+        [e,~,~] = PLLT2(b,a0_t,a0_r,c_t2,c_r2,aero_t,aero_r,geo_t,geo_r,50);
+        InducedDragFactor(i,j) = (1/e)-1;
     end
 end
 
@@ -120,7 +122,7 @@ xlabel('$\frac{c_t}{c_r}$','Interpreter','latex');
 ylabel('$\delta $','Interpreter','latex');
 ylim([0,.16]);
 title('Induced Drag Factor vs. Taper Ratio');
-legend('Position',[0.374791666666667 0.391435880447585 0.0590277777777777 0.0747938751472319]);
+legend('Location','best');
 
 
 
