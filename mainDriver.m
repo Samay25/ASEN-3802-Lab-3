@@ -14,7 +14,9 @@ PartOneDel1 = 0;
 PartOneDel2 = 0;
 PartOneTask3 =0;
 
-PartTwoTask2 = 1; 
+PartTwoTask2 = 0; 
+
+Part3_all = 1; 
 
 
 
@@ -309,6 +311,205 @@ title('Induced Drag Factor vs. Taper Ratio');
 legend('Position',[0.374791666666667 0.391435880447585 0.0590277777777777 0.0747938751472319]);
 
 end
+
+if Part3_all == 1 
+    % -------------------------------------
+    % Part 3 Task 1 
+    % -------------------------------------
+    
+    % Using your NACA airfoil generator, the provided vortex panel code, and your PLLT code, generate a plot
+    % of coefficient of lift versus angle of attack for the Cessna 180 aircraft
+    
+    % The Cessna uses a C180 (Can approx with trapezoidal)
+    % Span of 36ft 
+    % Straight taper from 5ft 4in root chord to 3ft 7in Tip chord
+    % ROOT airfoil NACA 2412 
+    % TIP airfoil NACA 0012
+    % Geometric AoA varies linearly and is 2 degrees larger at the root vs. tip
+    
+    % define/find params of wing design to pass into functions 
+    
+    b = 36; % span
+    c_r = 5.3333; % root chord
+    c_t = 3.5833; % tip chord 
+    aero_t = 0; % zero lift AoA at tip
+    aero_r = -.1982; % zero lift AoA at root
+    a0_t =  .1051; % zero lift slope at tip 
+    a0_r = .1119; % zero lift slope at root
+    alphaVals = linspace(-30,30); % AoA values
+    N = 50; % number of terms 
+    
+    taperRatio = c_t/c_r;
+    planformArea = (b/2)*c_r*(1+taperRatio);
+    AR = b^2 / planformArea; 
+    
+    % pre allocate
+    geo_t = zeros(length(alphaVals),1);
+    geo_r = zeros(length(alphaVals),1);
+    
+    
+    for i = 1: length(alphaVals)
+        geo_t(i) = alphaVals(i);
+        geo_r(i) = alphaVals(i) + 2; 
+    end
+    
+    % preallocation
+    c_L = zeros(length(alphaVals),1);
+    c_D = zeros(length(alphaVals),1);
+    e = zeros(length(alphaVals),1);
+    
+    for i = 1: length(alphaVals)
+    
+        [e(i),c_L(i),c_D(i)] = PLLT2(b,a0_t,a0_r,c_t,c_r,aero_t,aero_r,geo_t(i),geo_r(i),N);
+    
+    end
+    
+    % figure();
+    plot(alphaVals,c_L,'DisplayName','Cl');
+    xlabel('$\alpha [^\circ]$','Interpreter','latex');
+    ylabel('$ C_{l} $','Interpreter','latex');
+    yline(0,'--',{'Zero Lift Line'},'HandleVisibility', 'off')
+    legend('Position',[0.334166666666667 0.67978354978355 0.0946428571428571 0.0440476190476189]);
+    title(' Coefficient of Lift Vs. Angle of Attack ');
+    
+    % -------------------------------------
+    % Part 3 Task 2
+    % -------------------------------------
+    
+    % using exp data ----------------------
+    
+    % digitize plots from exp data
+    data = readmatrix("standard_rough.csv");
+    
+    % sectional values from exp data 
+    Cl = data(:,1);
+    Cd = data(:,2);
+    
+    % map Cl to AoA (cl = 2piAoA) and convert to degrees
+    alpha = Cl / (2*pi) * (180/pi);
+    
+    
+    % polyfit to get 'function' of cd vs. alpha 
+    [p,S] = polyfit(alpha,Cd,2);
+    
+    % space for new AoA values 
+    alphaVals = linspace(-30,30);
+    
+    % creating function for Cd vs. Alpha 
+    y1 = polyval(p,alphaVals); 
+    
+    % here I was trying to plot with fitted data only (its basically the same as the one below)
+    % plotting model alongside experimental data 
+    % figure();
+    % plot(alpha,Cd,'DisplayName','Exp. Data');
+    % hold on; 
+    % plot(alphaVals,y1,'--','DisplayName','Model');
+    % xlabel('Angle of attack $ \alpha [^\circ] $',Interpreter='latex');
+    % ylabel('$ C_{d}$',Interpreter='latex');
+    % legend('Position',[0.428214285714286 0.606904761904762 0.163392857142857 0.0797619047619047]);
+    % title(' $ C_{d}$ vs. $\alpha $',Interpreter='latex');
+    
+    % -----------------------------------
+    
+    % using sectional lift coeff --------
+    
+    % polyfit to get Cd as function of Cl
+    [p2,S2] = polyfit(Cl,Cd,2);
+    
+    % eval function with sectional lift coeff from PLLT to get sectional drag
+    % ('profile' drag)
+    y2 = polyval(p2,c_L);
+    
+    
+    % get alpha values from c_L
+    alphaVals2 = c_L / (2*pi) * (180/pi);
+    
+    %plotting sectional drag coeff. vs AoA
+    figure();
+    plot(alphaVals2,y2,'DisplayName','Model');
+    hold on; 
+    plot(alpha,Cd,'DisplayName','Exp Data');
+    xlabel('Angle of attack $ \alpha [^\circ] $',Interpreter='latex');
+    ylabel('$ C_{d}$',Interpreter='latex');
+    legend('Position',[0.428214285714286 0.606904761904762 0.163392857142857 0.0797619047619047]);
+    title('Coefficient of Drag Vs. Angle of Attack ');
+    % -----------------------------------
+    
+    % -------------------------------------
+    % Part 3 Task 3
+    % -------------------------------------
+    
+    % total drag coeff (profile [from fitted data] and induced [from PLLT])
+    C_Dtot = y2 + c_D;
+    
+    
+    % plotting total drag, induced and profile vs AoA
+    figure();
+    plot(alphaVals2,C_Dtot,'DisplayName','Total Drag');
+    hold on; 
+    plot(alphaVals2,c_D,'DisplayName','Induced Drag');
+    plot(alphaVals2,y2,'DisplayName','Profile Drag');
+    xlabel('Angle of attack $ \alpha [^\circ] $',Interpreter='latex');
+    ylabel('$ C_{d}$',Interpreter='latex');
+    legend('Position',[0.408472222222222 0.442443070278759 0.0763888888888887 0.0571260306242636]);
+    title('Effect of Angle of Attack on Drag Coefficient');
+    
+    % -------------------------------------
+    % Part 3 Task 4
+    % -------------------------------------
+    
+    % given info 
+    weight = 2500; % [lbs]
+    altitude = 10000; % [ft]
+    
+    % getting profile drag coeff at zero AoA
+    x = min(abs(y2));
+    CD0 = x; 
+    
+    % linspace for airspeed
+    % v = linspace(10,243); % [ft/s]
+    v = linspace(10,1000); % [ft/s]
+    v2 = v/1.688; % [knots]
+    
+    % standard day (from anderson)
+    rho_inf = 1.7556 * 10^(-3); % [slugs/ft^3]
+    p_inf = 1.4556 * 10^3; % [lb/ft^2]
+    
+    % steady level flight so, lift = Weight and ThrustReq = Drag
+    q_inf = (.5 * rho_inf) .* v.^2;
+    k = 1 / (pi * e(49) * AR);
+    
+    thrustReq = (q_inf .* CD0 .* planformArea) + ((k * weight^2) ./ (q_inf .* planformArea));
+    thrustReqParasite = (q_inf .* CD0 .* planformArea);
+    thrustReqInduced = ((k * weight^2) ./ (q_inf .* planformArea));
+    
+    [minThrustReq,I] = min(thrustReq); % speed for min thrust required
+    Vel_LDmax = v2(I); % speed for L/D max 
+    
+    fprintf('Minimum Thrust Required is %4.2f [lbf] \n',minThrustReq);
+    fprintf('Velocity for Minimum Thrust Required is  %4.2f [knots] \n',Vel_LDmax);
+    
+    
+    
+    figure();
+    plot(v2,thrustReq,'DisplayName','Thrust Required');
+    hold on; 
+    plot(v2,thrustReqInduced,'DisplayName','Thrust Required for Induced Drag');
+    plot(v2,thrustReqParasite,'DisplayName','Thrust Required for Parasite');
+    xlabel('Airspeed [knots]');
+    ylabel('Thrust Required [lbf]');
+    ylim([0,4*10^3]);
+    xlim([min(v2),max(v2)]);
+    title('Thrust required vs. Airspeed');
+    legend('Position',[0.382876984126985 0.449781535700261 0.38125 0.11547619047619]);
+
+
+
+
+
+
+
+end 
 
 
 
