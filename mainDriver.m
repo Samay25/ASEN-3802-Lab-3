@@ -2,6 +2,21 @@ clear;
 close all;
 clc;
 
+%% Pretty plots set up
+% set(0, 'defaultFigureUnits', 'inches', 'defaultFigurePosition', [1 1 8 5]);
+% figures are 8" wide and 5" tall, with the bottom left corner of the
+%figure beginning 1" up, and 1" to the right from the bottom left corner
+%of your screen -- adjust the size of the figure to your liking
+set(0,'defaultLineLineWidth',2.5) % sets all line widths of plotted lines
+set(0,'DefaultaxesLineWidth', 1.5) % sets line widths of axes
+set(0,'DefaultaxesFontSize', 14)
+set(0,'DefaultTextFontSize', 14)
+set(0,'DefaultaxesFontName', 'Times new Roman')
+set(0,'DefaultlegendFontName', 'Times new Roman')
+set(0,'defaultAxesXGrid','on')
+set(0,'defaultAxesYGrid','on')
+%... there are semi-infinite options here!
+
 %------------------------------------------
 % First digit is max camber as percentage of chord length
 % Second digit is location of max camber in tenths of chord
@@ -336,7 +351,7 @@ if Part3_all == 1
     aero_r = -.1982; % zero lift AoA at root
     a0_t =  .1051; % zero lift slope at tip 
     a0_r = .1119; % zero lift slope at root
-    alphaVals = linspace(-30,30); % AoA values
+    alphaVals = linspace(-30,30,120); % AoA values
     N = 50; % number of terms 
     
     taperRatio = c_t/c_r;
@@ -379,7 +394,7 @@ if Part3_all == 1
     % using exp data ----------------------
     
     % digitize plots from exp data
-    data = readmatrix("standard_rough.csv");
+    data = readmatrix("Re_6x106.csv");
     
     % sectional values from exp data 
     Cl = data(:,1);
@@ -467,8 +482,7 @@ if Part3_all == 1
     CD0 = x; 
     
     % linspace for airspeed
-    % v = linspace(10,243); % [ft/s]
-    v = linspace(10,1000); % [ft/s]
+    v = linspace(10,500); % [ft/s]
     v2 = v/1.688; % [knots]
     
     % standard day (from anderson)
@@ -498,7 +512,7 @@ if Part3_all == 1
     plot(v2,thrustReqParasite,'DisplayName','Thrust Required for Parasite');
     xlabel('Airspeed [knots]');
     ylabel('Thrust Required [lbf]');
-    ylim([0,4*10^3]);
+    ylim([0,2.5*10^3]);
     xlim([min(v2),max(v2)]);
     title('Thrust required vs. Airspeed');
     legend('Position',[0.382876984126985 0.449781535700261 0.38125 0.11547619047619]);
